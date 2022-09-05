@@ -5,11 +5,9 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { useIMask, IMaskInput, } from "react-imask";
 import validator from 'validator'
 const Form = () => {
-  // const array = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
 
   const [ad, setAd] = useState("");
   const [soyad, setSoyad] = useState("");
-  // console.log("🚀 ~ file: form.js ~ line 11 ~ Form ~ soyad", soyad)
   const [email, setEmail] = useState("");
   const [tckimlik, setTckimlik] = useState("");
   const [dogum, setDogum] = useState("");
@@ -27,7 +25,6 @@ const Form = () => {
     e.preventDefault();
 
     setFormInfo((prev: any) => {
-      // console.log("prev",prev)
 
       return [
         ...prev,
