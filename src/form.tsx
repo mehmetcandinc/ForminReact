@@ -4,6 +4,7 @@ import "bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useIMask, IMaskInput, } from "react-imask";
 import validator from 'validator'
+import { alanlarr } from "./alanlar";
 const Form = () => {
 
   const [ad, setAd] = useState("");
@@ -15,7 +16,9 @@ const Form = () => {
   const [ilce, setIlce] = useState("");
   const [adres, setAdres] = useState("");
   const [cinsiyet, setCinsiyet] = useState("");
-  const [alan, setAlan] = useState("");
+  const [alan, setAlan] = useState<boolean[]>(
+    new Array(alanlarr.length).fill(false)
+  );
   const [dosya, setDosya] = useState("");
   const [formInfo, setFormInfo] = useState<string[]>([]);
 
@@ -38,7 +41,7 @@ const Form = () => {
           ilce,
           adres,
           cinsiyet,
-          alan,
+          alanlarr.map(d=>d.name).filter((d,i)=> alan[i]).join(', '),
           dosya,
         ],
       ];
@@ -118,10 +121,13 @@ const Form = () => {
     }
   }
 
+  const handleOnChange = (position: any) => {
+    const updatedCheckedState = alan.map((item, index) =>
+      index === position ? !item : item
+    );
 
-  const [checkedState, setCheckedState] = useState(
-    new Array(alan.length).fill(false)
-  );
+    setAlan(updatedCheckedState);
+  };
   return (
     <form className="row g-3">
       <div className="col-md-6 was-validated">
@@ -304,43 +310,30 @@ const Form = () => {
           </label>
         </div>
       </label>
-      <label>İlgi alanları:</label>
-      <label htmlFor="c1">
-        <input
-          type="checkbox"
-          name="alan"
-          value="Müzik"
-          id="c1"
-          onChange={(e) => {
-            setAlan(e.currentTarget.value);
-          }}
-        />
-        Müzik
-      </label>
-      <label htmlFor="c2">
-        <input
-          type="checkbox"
-          name="alan"
-          value="Resim"
-          id="c2"
-          onChange={(e) => {
-            setAlan(e.currentTarget.value);
-          }}
-        />{" "}
-        Resim
-      </label>
-      <label htmlFor="c3">
-        <input
-          type="checkbox"
-          name="alan"
-          value="Spor"
-          id="c3"
-          onChange={(e) => {
-            setAlan(e.currentTarget.value);
-          }}
-        />
-        Spor
-      </label>
+
+      <div>
+        <ul className="alan-list">
+          {alanlarr.map(({ name }, index) => {
+            return (
+              <li key={index}>
+                <div className="alan-list-item">
+                  <div className="left-section">
+                    <input
+                      type="checkbox"
+                      id={`custom-checkbox-${index}`}
+                      name={name}
+                      value={name}
+                      checked={alan[index]}
+                      onChange={() => handleOnChange(index)}
+                    />
+                    <label htmlFor={`custom-checkbox-${index}`}>{name}</label>
+                  </div>
+                </div>
+              </li>
+            );
+          })}
+        </ul></div>
+
       <input
         className="form-control"
         type="file"
